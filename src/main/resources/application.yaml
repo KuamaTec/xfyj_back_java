@@ -55,8 +55,7 @@ logging:
   level:
     org.springframework: debug
     F:\WorkSpace\zyl-parrent\zyl_controller: info
-logging.path: F:\WorkSpace\gxuefuyanjiu
-logging.file: xuefuyanjiu.log
+logging.file: xfyj.log
 
 
 ##收费功能控制
