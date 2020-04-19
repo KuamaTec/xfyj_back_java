@@ -1,0 +1,117 @@
+jasypt:
+  encryptor:
+    password: gzds_GZDS
+    algorithm: PBEWithMD5AndDES
+server:
+  port: 8888
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+  datasource:
+    url: jdbc:mysql://rm-bp1q7td985ububf17eo.mysql.rds.aliyuncs.com:3306/xunfu_yanjiu?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    #    url: jdbc:mysql://localhost:3306/fojing?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: bigdata123456
+    password: Bigdata123456
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 1000
+      test-on-borrow: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+    ##阿里云redis
+  redis:
+    #database: 0
+    host: r-bp1fs6jwxrhm4pv285pd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Zgds123456
+  session:
+    store-type: redis
+
+#wx:
+#  config:
+#    appid: wxffe9f8ad93950a30
+#    mch_id: 1534636891
+#    #支付秘钥
+#    appsercret: b383942787194907b84abf6d77c78595
+#    #api秘钥
+#    key: Hlkj1234Hlkj1234Hlkj1234Hlkj1234
+#    notifyurl: http://a31ef7db.ngrok.io/WeChatPayController/WeChatPayNotify
+#    payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+#    ordinarymember: 1
+#    seniormember: 2
+#    upgrademember: 1
+#    pay_month: 5600
+#    pay_jidu: 6600
+#    pay_year: 9900
+
+logging:
+  level:
+    org.springframework: debug
+    F:\WorkSpace\zyl-parrent\zyl_controller: info
+logging.path: F:\WorkSpace\gxuefuyanjiu
+logging.file: xuefuyanjiu.log
+
+
+##收费功能控制
+access:
+  admissionlines:
+    register: 500
+    normal_member: 1000
+    senior_member: 1500
+
+
+##阿里云短信服务
+aliyunsms:
+  config:
+    accessKeyId: LTAI4FgRLYgw7vS1fuUpedQN
+    accessKeySecret: NBUg8naX4WVB5gonQYiSmOE9LWz0fh
+    domain: dysmsapi.aliyuncs.com
+    version: 2017-05-25
+    regionId: cn-hangzhou
+    SignName: 小不点应用
+    TemplateCode: SMS_175544423
+    OutId: gsgkzyl
+
+#阿里云OSS
+aliyunoss:
+  endpint: http://oss-cn-beijing.aliyuncs.com
+  accesskeyid: LTAIiqlVRrr68NMR
+  accesskeysecret: kshf6fIstKusgz4m8j6JfNVTQS6Fcp
+  bucket: fojingapp
+
+
+#微信授权、支付
+wx:
+  config:
+    appid: wx630dc5a5e802df54
+    appsercret: de40721a605db0379e0033596af22579
+    #支付api秘钥（已修改，需要重置）
+    mch_id: 1578294421
+    key: Xfyj1234Xfyj1234Xfyj1234Xfyj1234
+    notifyurl: http://a31ef7db.ngrok.io/WeChatPayController/WeChatPayNotify
+    payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+    ordinarymember: 1
+    seniormember: 2
+    upgrademember: 1
+#wx:
+#  config:
+#    appid: wxffe9f8ad93950a30
+#    mch_id: 1534636891
+#    #oThf74k_zhLnEvQJdc0Q4P5H2cYUoThf74k_zhLnEvQJdc0Q4P5H2cYU秘钥
+#    appsercret: 5401f47627f73112f42c90a26d0547bb
+#    #支付api秘钥（已修改，需要重置）
+#    key: Hlkj1234Hlkj1234Hlkj1234Hlkj1234
+#    notifyurl: http://a31ef7db.ngrok.io/WeChatPayController/WeChatPayNotify
+#    payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+#    ordinarymember: 1
+#    seniormember: 2
+#    upgrademember: 1
+
+#fdsfdas
