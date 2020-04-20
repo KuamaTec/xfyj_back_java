@@ -39,4 +39,6 @@ public class Goods {
     private String brand_id;//系列id
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date time;//上架时间
+    private String goods_status;//商品状态
+    private Integer goods_repertory;//库存
 }

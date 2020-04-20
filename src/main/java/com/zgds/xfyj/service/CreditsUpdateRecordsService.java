@@ -23,24 +23,33 @@ public class CreditsUpdateRecordsService {
      *
      * @return
      */
-    public ServerResponse getAll(String user_id, Integer currPage, Integer pageSize) {
-        int totalPage = 0;
-        int totalCount = mapper.getCount(user_id);
-        if (totalCount > 0) {
-            if ((totalCount % pageSize) == 0) {
-                totalPage = totalCount / pageSize;
+    public ServerResponse credits_records(String user_id, Integer currPage, Integer pageSize) {
+        ServerResponse serverResponse = null;
+
+        try {
+            int totalPage = 0;
+            int totalCount = mapper.getCount(user_id);
+            if (totalCount > 0) {
+                if ((totalCount % pageSize) == 0) {
+                    totalPage = totalCount / pageSize;
+                } else {
+                    totalPage = (totalCount / pageSize) + 1;
+                }
+                if (currPage > totalPage) {
+                    log.info("用户查询积分记录页码错误");
+                    return ServerResponse.createByErrorMessage("页码错误");
+                }
+                int startIndex = (currPage - 1) * pageSize;
+                log.info("查询用户积分明细成功：" + Mapper + ".getAll()");
+                serverResponse = ServerResponse.createBySuccess("查询用户积分明细成功！", mapper.getAll(user_id, startIndex, pageSize));
             } else {
-                totalPage = (totalCount / pageSize) + 1;
+                serverResponse = ServerResponse.createBySuccess("查询用户积分明细成功,暂无数据！", null);
             }
-            if (currPage > totalPage) {
-                log.info("用户查询积分记录页码错误");
-                return ServerResponse.createByErrorMessage("页码错误");
-            }
-            int startIndex = (currPage - 1) * pageSize;
-            log.info("用户查询积分记录成功：" + Mapper + ".getAll()");
-            return ServerResponse.createBySuccess("查询成功！", mapper.getAll(user_id, startIndex, pageSize));
-        } else {
-            return ServerResponse.createBySuccess("查询成功,暂无数据！", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            serverResponse = ServerResponse.createByErrorMessage("查询用户积分明细异常！");
+        } finally {
+            return serverResponse;
         }
 
     }

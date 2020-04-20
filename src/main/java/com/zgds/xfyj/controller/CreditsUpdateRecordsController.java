@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,15 +33,17 @@ public class CreditsUpdateRecordsController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/getAll")
-    @ApiOperation(value = "获取用户积分记录列表", notes = "获取用户积分记录列表", httpMethod = "POST")
+    @RequestMapping("/records/{user_id}/{currPage}/{pageSize}")
+    @ApiOperation(value = "获取用户积分记录列表", notes = "获取用户积分记录列表", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "user_id", value = "用户id", paramType = "query", required = true, dataType = "String")
+            @ApiImplicitParam(name = "user_id", value = "用户id", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "currPage", value = "当前页码", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "user_id", value = "每页展示数据", paramType = "query", required = true, dataType = "String")
     })
-    public ServerResponse getAll(@RequestParam("user_id") String user_id,
-                                 @RequestParam(value = "currPage", required = false, defaultValue = "1") Integer currPage,
-                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-        ServerResponse serverResponse = service.getAll(user_id, currPage, pageSize);
+    public ServerResponse getAll(@PathVariable("user_id") String user_id,
+                                 @PathVariable(value = "currPage", required = true) Integer currPage,
+                                 @PathVariable(value = "pageSize", required = true) Integer pageSize) {
+        ServerResponse serverResponse = service.credits_records(user_id, currPage, pageSize);
         return serverResponse;
     }
 
