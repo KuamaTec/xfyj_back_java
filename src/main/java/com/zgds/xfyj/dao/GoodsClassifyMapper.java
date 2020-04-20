@@ -30,6 +30,7 @@ public interface GoodsClassifyMapper extends Mapper<GoodsClassify> {
 
     @Delete("delete from tbl_goods_classify where id=#{id}")
     Integer deleteGoodsClassify(String id);
+
 }
 
 

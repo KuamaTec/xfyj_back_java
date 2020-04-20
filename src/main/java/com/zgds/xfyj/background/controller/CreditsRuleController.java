@@ -26,7 +26,6 @@ public class CreditsRuleController {
     @Autowired
     private CreditsRuleService service;
 
-
     /**
      * 获取积分规则列表
      *
@@ -40,7 +39,6 @@ public class CreditsRuleController {
         ServerResponse serverResponse = service.getAll();
         return serverResponse;
     }
-
 
     /**
      * 添加获取积分规则
@@ -97,4 +95,36 @@ public class CreditsRuleController {
         ServerResponse serverResponse = service.updateCreditsRule(creditsRule);
         return serverResponse;
     }
+
+    /**
+     * 添加获取积分规则
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertCredits")
+    @ApiOperation(value = "添加获取积分规则", notes="添加获取积分规则", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "present_percent", value = "获取积分规则（订单金额百分比）", paramType = "query", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "min_order_price", value = "规则金额区间下限", paramType = "query", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "max_order_price", value = "规则金额区间上限", paramType = "query", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "c_min_order_price", value = "使用积分最低订单金额", paramType = "query", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "consume_percent", value = "消费积分百分比", paramType = "query", required = false, dataType = "Integer"),
+    })
+    public ServerResponse insertCredits(@Param("present_percent")Integer present_percent,
+                                        @Param("min_order_price")Integer min_order_price,
+                                        @Param("max_order_price")Integer max_order_price,
+                                        @Param("c_min_order_price")Integer c_min_order_price,
+                                        @Param("consume_percent")Integer consume_percent){
+        CreditsRule creditsRule = null;
+        if (present_percent!=null||min_order_price!=null||max_order_price!=null){
+            creditsRule = new CreditsRule();
+            creditsRule.setPresent_percent(present_percent);
+            creditsRule.setMin_order_price(min_order_price);
+            creditsRule.setMax_order_price(max_order_price);
+        }
+        ServerResponse serverResponse = service.insertCredits(creditsRule,c_min_order_price,consume_percent);
+        return serverResponse;
+    }
+
 }

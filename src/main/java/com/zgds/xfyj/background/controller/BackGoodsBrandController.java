@@ -40,7 +40,6 @@ public class BackGoodsBrandController {
         ServerResponse serverResponse = service.getAll();
         return serverResponse;
     }
-
     /**
      * 添加产品分类系列
      *
@@ -83,19 +82,22 @@ public class BackGoodsBrandController {
         return serverResponse;
     }
 
+
     /**
      * 删除产品分类系列
-     *
      * @return
      */
     @ResponseBody
     @RequestMapping("/deleteGoodsClassify")
-    @ApiOperation(value = "删除产品分类系列", notes = "删除产品分类系列", httpMethod = "POST")
+    @ApiOperation(value = "删除产品分类系列", notes="删除产品分类系列", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "系列id", paramType = "query", required = true, dataType = "String")
     })
-    public ServerResponse deleteGoodsClassify(String id) {
-        ServerResponse serverResponse = service.deleteGoodsBrand(id);
+    public ServerResponse deleteGoodsClassify(@RequestParam(value = "id[]") String[] id){
+        ServerResponse serverResponse =null;
+        for (int i = 0; i < id.length; i++) {
+            serverResponse = service.deleteGoodsBrand(id[i]);
+        }
         return serverResponse;
     }
 }

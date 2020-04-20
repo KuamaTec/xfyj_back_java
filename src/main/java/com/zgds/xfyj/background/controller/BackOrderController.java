@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -95,4 +96,52 @@ public class BackOrderController {
         ServerResponse serverResponse = service.updateOrder(order);
         return serverResponse;
     }
+
+
+
+    /**
+     * 查看所有订单
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getOrder")
+    @ApiOperation(value = "查看所有订单", notes="查看所有订单", httpMethod = "GET")
+    public ServerResponse getOrder(){
+        ServerResponse serverResponse = service.getOrder();
+        return serverResponse;
+    }
+
+    /**
+     * 查看所有订单
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/showGetAll")
+    @ApiOperation(value = "查看所有订单", notes="查看所有订单", httpMethod = "GET")
+    public ServerResponse showGetAll(){
+        ServerResponse serverResponse = service.showGetAll();
+        return serverResponse;
+    }
+
+    /**
+     * 删除订单
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/delete")
+    @ApiOperation(value = "根据订单id删除订单", notes="根据订单id删除订单", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单id", paramType = "query", required = true, dataType = "String")
+    })
+    public ServerResponse delete(@RequestParam(value = "id[]")String[] id){
+        ServerResponse serverResponse =null;
+        for (int i = 0; i < id.length; i++) {
+            serverResponse = service.deleteOrder(id[i]);
+        }
+        return serverResponse;
+    }
+
 }

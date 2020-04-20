@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,13 +30,14 @@ public class UserService {
     private UserMapper mapper;
 
     /**
-     * 微信授权判断用户是否存在
-     *
-     * @param user
+     * 查询所有用户信息
      * @return
      */
-    public ServerResponse getAll() {
+    public ServerResponse getAll(){
         List<User> list = mapper.getAll();
+        for (User li:list) {
+            li.setNick(URLDecoder.decode(li.getNick()));
+        }
         return ServerResponse.createBySuccess(list);
     }
 
@@ -205,5 +207,8 @@ public class UserService {
         }
     }
 
+    public User selectById(String id){
 
+        return mapper.selectById(id);
+    }
 }

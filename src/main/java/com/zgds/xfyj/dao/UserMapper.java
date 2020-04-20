@@ -40,6 +40,10 @@ public interface UserMapper extends Mapper<User> {
     @Select("SELECT * FROM tbl_user where mobile=#{mobile}")
     List<User> selectByMobile(@Param("mobile") String mobile);
 
+    //根据用户ID
+    @Select("SELECT * FROM tbl_user where id=#{id}")
+    User selectById(@Param("id") String id);
+
     //上传头像
     @Update("update tbl_user set user_logo=#{user_logo} where id=#{id}")
     Integer upUserLogo(@Param("id") String id, @Param("user_logo") String user_logo);
