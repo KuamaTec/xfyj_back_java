@@ -19,9 +19,6 @@ public interface InformMapper extends Mapper<Inform> {
     List<Inform> getInform();
 
 
-    @Select("SELECT * FROM tbl_inform ORDER BY time DESC")
-    List<Inform> getAll();
-
     @Insert("insert into tbl_inform values(#{id},#{content},#{time})")
     int insert(Inform inform);
 
@@ -36,6 +33,13 @@ public interface InformMapper extends Mapper<Inform> {
             "</script>"
     )
     Integer updateInform(Inform inform);
+
+    @Select("SELECT * FROM tbl_inform ORDER BY time DESC limit #{currPage},#{pageSize}")
+    List<Inform> getAll(Integer currPage,Integer pageSize);
+
+    @Select("select count(*) from tbl_inform")
+    Integer informCount();
+
 }
 
 

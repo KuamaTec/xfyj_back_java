@@ -25,9 +25,20 @@ public class InformService {
     }
 
 
-    public ServerResponse getAll() {
+    public ServerResponse getAll(Integer currPage,Integer pageSize){
+        int totalPage = 0;
+        int totalCount = mapper.informCount();
+        if ((totalCount % pageSize) == 0) {
+            totalPage = totalCount / pageSize;
+        } else {
+            totalPage = (totalCount / pageSize) + 1;
+        }
+        if (currPage > totalPage) {
+            return ServerResponse.createBySuccessMessages("页码错误");
+        }
+        int startIndex = (currPage-1)*pageSize;
         log.info("商家查询所有通知信息：InformMapper.getAll（）");
-        return ServerResponse.createBySuccess("查询成功！", mapper.getAll());
+        return ServerResponse.createBySuccess("查询成功！",mapper.getAll(startIndex,pageSize));
     }
 
     public ServerResponse insert(Inform inform) {

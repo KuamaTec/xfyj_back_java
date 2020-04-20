@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -31,14 +32,27 @@ public class BackInformController {
      * @param
      * @return
      */
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping("/getAll")
     @ApiOperation(value = "查询通知信息列表", notes = "查询通知信息列表", httpMethod = "GET")
     public ServerResponse getAll() {
         ServerResponse serverResponse = service.getAll();
         return serverResponse;
-    }
+    }*/
 
+    /**
+     * 查询通知信息列表
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getAll")
+    @ApiOperation(value = "查询通知信息列表", notes="查询通知信息列表", httpMethod = "POST")
+    public ServerResponse getAll(@RequestParam(value = "currPage", required = false, defaultValue = "1") Integer currPage,
+                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
+        ServerResponse serverResponse = service.getAll(currPage,pageSize);
+        return serverResponse;
+    }
     /**
      * 添加通知信息
      *
@@ -91,4 +105,22 @@ public class BackInformController {
         return serverResponse;
     }
 
+    /**
+     * 根据id删除通知信息
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/delete")
+    @ApiOperation(value = "根据id删除通知信息", notes="根据id删除通知信息", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "通知id", paramType = "query", required = true, dataType = "String")
+    })
+    public ServerResponse deleteInform(@RequestParam(value = "id[]") String[] id){
+        ServerResponse serverResponse =null;
+        for (int i = 0; i < id.length; i++) {
+            serverResponse = service.deleteInform(id[i]);
+        }
+        return serverResponse;
+    }
 }

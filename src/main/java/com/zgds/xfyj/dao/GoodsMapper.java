@@ -15,6 +15,9 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface GoodsMapper extends Mapper<Goods> {
 
+    @Select("select * from tbl_goods")
+    List<Goods> getAllGoods();
+
     @Select("select * from tbl_goods where brand_id=#{brand_id}")
     List<Goods> getAllBrand(String brand_id);
 
@@ -33,7 +36,6 @@ public interface GoodsMapper extends Mapper<Goods> {
     @Select("select count(*) from tbl_goods where is_discount='1'")
     Integer getCountIsDiscount();
 
-
     @Insert("insert into tbl_goods values(#{id},#{goods_name},#{sale_price}," +
             "#{standard},#{produce_addr},#{main_img},#{recommend}," +
             "#{classify_id},#{brand_id},#{grade},#{is_discount}," +
@@ -42,6 +44,7 @@ public interface GoodsMapper extends Mapper<Goods> {
 
     @Delete("delete from tbl_goods where id=#{id}")
     Integer deleteGoods(String id);
+
 
     @Update("<script>" +
             "update tbl_goods set" +
@@ -63,6 +66,7 @@ public interface GoodsMapper extends Mapper<Goods> {
             "</script>"
     )
     Integer updateGoods(Goods goods);
+
 }
 
 

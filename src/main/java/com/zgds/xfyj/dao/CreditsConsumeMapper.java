@@ -15,20 +15,20 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface CreditsConsumeMapper extends Mapper<CreditsConsume> {
 
-    @Select("SELECT * FROM tbl_credits_consume")
+    @Select("SELECT * FROM tbl_credits_consume_rule")
     List<CreditsConsume> getAll();
 
-    @Insert("insert into tbl_credits_consume values(#{id},#{min_order_price},#{consume_percent})")
+    @Insert("insert into tbl_credits_consume_rule values(#{id},#{min_order_price},#{consume_percent})")
     int insert(CreditsConsume creditsConsume);
 
-    @Delete("delete from tbl_credits_consume where id=#{id}")
+    @Delete("delete from tbl_credits_consume_rule where id=#{id}")
     Integer deleteCreditsConsume(String id);
 
     @Update("<script>" +
-            "update tbl_credits_consume set" +
+            "update tbl_credits_consume_rule set" +
             "<if test='min_order_price != null'>min_order_price=#{min_order_price},</if>" +
             "<if test='consume_percent != null'>consume_percent=#{consume_percent}</if>" +
-            "where id=#{id}" +
+            "where id=#{id}"+
             "</script>"
     )
     Integer updateCreditsConsume(CreditsConsume creditsConsume);

@@ -1,13 +1,7 @@
 package com.zgds.xfyj.service;
 
-import com.zgds.xfyj.dao.CartMapper;
-import com.zgds.xfyj.dao.GoodsMapper;
-import com.zgds.xfyj.dao.OrderItemsMapper;
-import com.zgds.xfyj.dao.OrderMapper;
-import com.zgds.xfyj.domain.pojo.Cart;
-import com.zgds.xfyj.domain.pojo.Goods;
-import com.zgds.xfyj.domain.pojo.Order;
-import com.zgds.xfyj.domain.pojo.OrderItems;
+import com.zgds.xfyj.dao.*;
+import com.zgds.xfyj.domain.pojo.*;
 import com.zgds.xfyj.domain.vo.OrderVO;
 import com.zgds.xfyj.util.BigDecimalArithUtil;
 import com.zgds.xfyj.util.PlatformOrderNoUtils;
@@ -23,10 +17,9 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.thymeleaf.util.ListUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -41,6 +34,8 @@ public class OrderService {
     private CartMapper cartMapper;
     @Autowired
     private GoodsMapper goodsMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     private String Mapper = "OrderMapper";
 
@@ -162,15 +157,73 @@ public class OrderService {
 
     /**
      * 用户查看所有订单
-     *
      * @return
      */
-    public ServerResponse getAll() {
-        List<Order> goodsList = mapper.getAll();
-        log.info("用户查看所有订单:" + Mapper + ".getShowGoods()");
-        return ServerResponse.createBySuccess("查询成功！", goodsList);
-    }
+    public ServerResponse getAll(){
+        List<Order>  goodsList=mapper.getAll();
+        List<User> userList = userMapper.getAll();
+        List list = new ArrayList();
+        for (Order gList:goodsList) {
+            for (User uList:userList) {
+                Map<String,Object> map1 = new HashMap<>();
+                uList.setNick(URLDecoder.decode(uList.getNick()));
+                if (gList.getUser_id().equals(uList.getId())){
+                    map1.put("id",gList.getId());
+                    map1.put("order_name",gList.getOrder_name());//订单名称
+                    map1.put("order_status",gList.getOrder_status());//订单状态(1-已下单（待付款），2-待发货，3-已发货，4-待收货，5-已收货)
+                    map1.put("order_price",gList.getOrder_price());//订单总金额
+                    map1.put("place_time",gList.getPlace_time());//下单时间
+                    map1.put("update_time",gList.getUpdate_time());//更新时间
+                    map1.put("user_id",gList.getUser_id());//用户id
+                    map1.put("cart_ids",gList.getCart_ids());//外键—购物车商品id（逗号分开）
+                    map1.put("order_no",gList.getOrder_no());//订单编号
+                    map1.put("nick",uList.getNick());//昵称
+                    map1.put("open_id",uList.getOpen_id());//微信openid
+                    map1.put("head_photo",uList.getHead_photo());//微信头像
+                    map1.put("mobile",uList.getMobile());//手机号
+                    map1.put("shipping_address",uList.getShipping_address());//收货地址
+                    map1.put("rigist_time",uList.getRigist_time());//用户注册时间
+                    list.add(map1);
+                    break;
+                }
+            }
+        }
 
+        log.info("用户查看所有订单:"+Mapper+".getShowGoods()");
+        /*return ServerResponse.createBySuccess("查询成功！",goodsList);*/
+        return ServerResponse.createBySuccess("查询成功！",list);
+    }
+    /**
+     * 用户查看所有订单
+     * @return
+     */
+    public ServerResponse getOrder(){
+        List<Order>  goodsList=mapper.getAll();
+        log.info("用户查看所有订单:"+Mapper+".getShowGoods()");
+        return ServerResponse.createBySuccess("查询成功！",goodsList);
+    }
+    /**
+     * 用户查看所有订单
+     * @return
+     */
+    public ServerResponse showGetAll(){
+        List list = new ArrayList();
+        List<Order> goodsList=mapper.getAll();
+        for (Order gList:goodsList) {
+            Map<String,Object> map = new HashMap<>();
+            User user = userMapper.selectById(gList.getUser_id());
+            user.setNick(URLDecoder.decode(user.getNick()));
+            map.put("id",gList.getId());
+            map.put("order_no",gList.getOrder_no());
+            map.put("place_time",gList.getPlace_time());
+            map.put("nick",user.getNick());
+            map.put("mobile",user.getMobile());
+            map.put("order_price",gList.getOrder_price());
+            list.add(map);
+        }
+        log.info("用户查看所有订单:"+Mapper+".getShowGoods()");
+        return ServerResponse.createBySuccess("查询成功！",list);
+    }
     /**
      * 用户根据订单状态获取订单列表
      *

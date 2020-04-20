@@ -29,31 +29,15 @@ public class BackGoodsController {
     private GoodsService service;
 
     /**
-     * 添加商品信息
-     *
-     * @param goods
+     * 查看所有商品详情列表
+     * @param
      * @return
      */
     @ResponseBody
-    @RequestMapping("/insert")
-    @ApiOperation(value = "添加商品信息", notes = "添加商品信息", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "goods_name", value = "商品名称", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "sale_price", value = "价格", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "standard", value = "规格", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "produce_addr", value = "产地", paramType = "query", required = true, dataType = "String"),
-            /*@ApiImplicitParam(name = "file", value = "图片路径", paramType = "query", required = true, dataType = "MultipartFile"),*/
-            @ApiImplicitParam(name = "recommend", value = "是否推荐（0-否，1-是）", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "classify_id", value = "分类id", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "brand_id", value = "系列id", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "grade", value = "酒精度", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "is_discount", value = "是否打折（0-不打折，1-打折）", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "discount", value = "所打折扣", paramType = "query", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "discount_price", value = "折后价", paramType = "query", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "capacity", value = "容量", paramType = "query", required = true, dataType = "String")
-    })
-    public ServerResponse insert(Goods goods, @RequestParam("file") MultipartFile file) {
-        ServerResponse serverResponse = service.insert(goods, file);
+    @RequestMapping("/getAllGoods")
+    @ApiOperation(value = "查看所有商品详情列表", notes="查看所有商品详情列表", httpMethod = "GET")
+    public ServerResponse getAllGoods(){
+        ServerResponse serverResponse = service.getAllGoods();
         return serverResponse;
     }
 
@@ -103,4 +87,32 @@ public class BackGoodsController {
         ServerResponse serverResponse = service.updateGoods(goods, file);
         return serverResponse;
     }
+
+    /**
+     * 添加商品信息
+     * @param goods
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertAll")
+    @ApiOperation(value = "添加商品信息", notes="添加商品信息", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "goods_name", value = "商品名称", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "sale_price", value = "价格", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "standard", value = "规格", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "produce_addr", value = "产地", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "recommend", value = "是否推荐（0-否，1-是）", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "classify_id", value = "分类id", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "brand_id", value = "系列id", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "grade", value = "酒精度", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "is_discount", value = "是否打折（0-不打折，1-打折）", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "discount", value = "所打折扣", paramType = "query", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "discount_price", value = "折后价", paramType = "query", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "capacity", value = "容量", paramType = "query", required = true, dataType = "String")
+    })
+    public ServerResponse insertAll(Goods goods, @RequestParam("file") MultipartFile file,@RequestParam("file1") MultipartFile file1,@RequestParam("file2") MultipartFile file2){
+        ServerResponse serverResponse = service.insertAll(goods,file,file1,file2);
+        return serverResponse;
+    }
+
 }

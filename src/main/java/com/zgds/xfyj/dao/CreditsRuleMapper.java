@@ -15,17 +15,17 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface CreditsRuleMapper extends Mapper<CreditsRule> {
 
-    @Select("SELECT * FROM tbl_credits_rule")
+    @Select("SELECT * FROM tbl_credits_increase_rule")
     List<CreditsRule> getAll();
 
-    @Insert("insert into tbl_credits_rule values(#{id},#{present_percent},#{min_order_price},#{max_order_price})")
+    @Insert("insert into tbl_credits_increase_rule values(#{id},#{present_percent},#{min_order_price},#{max_order_price})")
     int insert(CreditsRule creditsRule);
 
-    @Delete("delete from tbl_credits_rule where id=#{id}")
+    @Delete("delete from tbl_credits_increase_rule where id=#{id}")
     Integer deleteCreditsRule(String id);
 
     @Update("<script>" +
-            "update tbl_credits_rule set" +
+            "update tbl_credits_increase_rule set" +
             "<if test='present_percent != null'>present_percent=#{present_percent},</if>" +
             "<if test='min_order_price != null'>min_order_price=#{min_order_price},</if>" +
             "<if test='max_order_price != null'>max_order_price=#{max_order_price}</if>" +
@@ -34,6 +34,5 @@ public interface CreditsRuleMapper extends Mapper<CreditsRule> {
     )
     Integer updateCreditsRule(CreditsRule creditsRule);
 }
-
 
 

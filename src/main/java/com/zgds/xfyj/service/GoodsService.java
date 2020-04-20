@@ -1,9 +1,11 @@
 package com.zgds.xfyj.service;
 
 import com.zgds.xfyj.dao.GoodsBrandMapper;
+import com.zgds.xfyj.dao.GoodsClassifyMapper;
 import com.zgds.xfyj.dao.GoodsMapper;
 import com.zgds.xfyj.domain.pojo.Goods;
 import com.zgds.xfyj.domain.pojo.GoodsBrand;
+import com.zgds.xfyj.domain.pojo.GoodsClassify;
 import com.zgds.xfyj.util.AliOSSUtils;
 import com.zgds.xfyj.util.ServerResponse;
 import com.zgds.xfyj.util.UUIDUtils;
@@ -27,11 +29,43 @@ public class GoodsService {
     @Autowired
     private GoodsMapper mapper;
     @Autowired
+    private GoodsClassifyMapper classifyMapper;
+    @Autowired
     private GoodsBrandMapper brandMapper;
+    @Autowired
+    private GoodsDetailImgsService imgsService;
+    @Autowired
+    private GoodsDetailSwiperService swiperService;
     @Autowired
     private AliOSSUtils aliOSSUtils;
 
     private String Mapper = "GoodsMapper";
+
+    public ServerResponse getAllGoods(){
+        log.info("用户开始查询商品详情："+Mapper+".getAllBrand()");
+        List<Goods> list = mapper.getAllGoods();
+        List<GoodsClassify> goodsClassifyList = classifyMapper.getAll();
+        List<GoodsBrand> goodsBrandList = brandMapper.getAll();
+        log.info("用户开始查询商品详情,转换商品分类id：classifyMapper.getClassifyName");
+        log.info("用户开始查询商品详情,转换商品系列id：brandMapper.getBrand");
+        for (Goods li:list) {
+            /*li.setClassify_id(classifyMapper.getClassifyName(li.getClassify_id()).getClassify_name());
+            li.setBrand_id(brandMapper.getBrand(li.getBrand_id()).getBrand_name());*/
+            for (GoodsClassify gList:goodsClassifyList) {
+                if (gList.getId().equals(li.getClassify_id())){
+                    li.setClassify_id(gList.getClassify_name());
+                    break;
+                }
+            }
+            for (GoodsBrand gList:goodsBrandList) {
+                if (gList.getId().equals(li.getBrand_id())){
+                    li.setBrand_id(gList.getBrand_name());
+                    break;
+                }
+            }
+        }
+        return ServerResponse.createBySuccess("商品详情查询成功！",list);
+    }
 
     public ServerResponse getShowGoods(String brand_id) {
         //1、查询商品信息
@@ -48,7 +82,7 @@ public class GoodsService {
     }
 
     public ServerResponse getGoods(String brand_id) {
-        log.info("用户跟据系列id查询产品信息：GoodsMapper.getAllBrand()", brand_id);
+        log.info("用户跟据系列id查询产品信息：GoodsMapper.getGoods()", brand_id);
         return ServerResponse.createBySuccess("查询成功！", mapper.getAllBrand(brand_id));
     }
 
@@ -90,31 +124,45 @@ public class GoodsService {
 
     /**
      * 添加商品信息
-     *
      * @param goods
      * @param file
      * @return
      */
-    public ServerResponse insert(Goods goods, MultipartFile file) {
-        goods.setId(UUIDUtils.generateId());
+    public ServerResponse insertAll(Goods goods, MultipartFile file,MultipartFile file1,MultipartFile file2){
+        System.out.println(goods.toString()+"-----"+file.isEmpty()+"---------"+file1.isEmpty()+"------------"+file2.isEmpty());
+        /*String id=UUIDUtils.generateId();
+        goods.setId(id);
         goods.setTime(new Date());
-        if (!file.isEmpty()) {
+        if (!file.isEmpty()){
             try {
                 log.info("添加产品信息，上传产品图片成功！");
-                goods.setMain_img(aliOSSUtils.uploadImg(file, "Goods"));
+                goods.setMain_img(aliOSSUtils.uploadImg(file,"Goods"));
             } catch (FileNotFoundException e) {
-                log.info("添加产品信息，上传产品图片失败:", e.getLocalizedMessage());
+                log.info("添加产品信息，上传产品图片失败:",e.getLocalizedMessage());
                 e.printStackTrace();
             }
         }
-        Integer i = mapper.insert(goods);
-        if (i > 0) {
-            log.info("添加产品信息成功:" + Mapper + ".insert()");
+        Integer i=mapper.insert(goods);
+        if (i>0){
+            log.info("添加产品详情信息成功:"+Mapper+".insert()");
+            GoodsDetailImgs goodsDetailImgs = new GoodsDetailImgs();
+            goodsDetailImgs.setId(UUIDUtils.generateId());
+            goodsDetailImgs.setGoods_id(id);
+            imgsService.insert(goodsDetailImgs,file1);
+
+            GoodsDetailSwiper goodsDetailSwiper = new GoodsDetailSwiper();
+            goodsDetailSwiper.setId(UUIDUtils.generateId());
+            goodsDetailSwiper.setGoods_id(id);
+            swiperService.insert(goodsDetailSwiper,file2);
+
+
+            log.info("添加产品信息成功:"+Mapper+".insert()");
             return ServerResponse.createBySuccessMessages("添加成功！");
-        } else {
-            log.info("添加产品信息失败:" + Mapper + ".insert()");
+        }else {
+            log.info("添加产品信息失败:"+Mapper+".insert()");
             return ServerResponse.createByErrorMessage("添加失败！");
-        }
+        }*/
+        return null;
     }
 
     /**

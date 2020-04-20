@@ -45,10 +45,10 @@ public class GoodsClassifyService {
     public ServerResponse updateGoodsClassify(GoodsClassify goodsClassify) {
         int i = mapper.updateGoodsClassify(goodsClassify);
         if (i > 0) {
-            log.info("用户添加酒类分类成功：GoodsClassifyMapper.insert（）", goodsClassify);
+            log.info("用户添加酒类分类成功：GoodsClassifyMapper.updateGoodsClassify（）", goodsClassify);
             return ServerResponse.createBySuccessMessages("修改成功！");
         } else {
-            log.info("用户添加酒类分类成功：GoodsClassifyMapper.insert（）", goodsClassify);
+            log.info("用户添加酒类分类成功：GoodsClassifyMapper.updateGoodsClassify（）", goodsClassify);
             return ServerResponse.createBySuccessMessages("修改失败！");
         }
     }
@@ -56,10 +56,10 @@ public class GoodsClassifyService {
     public ServerResponse deleteGoodsClassify(String id) {
         int i = mapper.deleteGoodsClassify(id);
         if (i > 0) {
-            log.info("用户删除酒类分类成功：GoodsClassifyMapper.insert（）", id);
+            log.info("用户删除酒类分类成功：GoodsClassifyMapper.deleteGoodsClassify（）", id);
             return ServerResponse.createBySuccessMessages("删除成功！");
         } else {
-            log.info("用户删除酒类分类失败：GoodsClassifyMapper.insert（）", id);
+            log.info("用户删除酒类分类失败：GoodsClassifyMapper.deleteGoodsClassify（）", id);
             return ServerResponse.createBySuccessMessages("删除失败！");
         }
     }
