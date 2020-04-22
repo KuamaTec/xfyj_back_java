@@ -63,6 +63,23 @@ public class AddressService {
         }
     }
 
+    public ServerResponse getAddressByAddrId(String userId,String addId) {
+
+        ServerResponse serverResponse = null;
+
+        try {
+            Address address = addressMapper.getByUserIdAddrId(userId, addId);
+            serverResponse = ServerResponse.createBySuccess("获取用户收货地址详情成功", address);
+            log.info("获取用户{}收货地址详情成功", userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            serverResponse = ServerResponse.createByErrorMessage("获取用户收货地址详情失败");
+            log.info("获取用户{}收货地址详情失败,错误信息{}", userId, e.getLocalizedMessage());
+        } finally {
+            return serverResponse;
+        }
+    }
+
     public ServerResponse delAddress(String userId, String addr_id) {
 
         ServerResponse serverResponse = null;

@@ -109,20 +109,42 @@ public class UserController {
     }
 
 
-    /**
-     * 获取用户收货地址
-     *
-     * @return
-     */
+
+
+    //以下是收货地址相关
+    //以下是收货地址相关
+    //以下是收货地址相关
+    //以下是收货地址相关
+
     @Autowired
     private AddressMapper addressMapper;
 
+    /**
+     * 获取收货地址列表
+     * @param userId
+     * @param addrId
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/addr/{userId}")
     @ApiOperation(value = "获取指定用户的收货地址信息", notes = "获取指定用户的收货地址信息", httpMethod = "GET")
-    public ServerResponse getAddress(@PathVariable(value = "userId") String userId) {
+    public ServerResponse getAddressList(@PathVariable(value = "userId") String userId) {
 
         return addressService.getAddress(userId);
+    }
+    /**
+     * 获取收货地址详情
+     * @param userId
+     * @param addrId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/addr/detail/{userId}/{addrId}")
+    @ApiOperation(value = "获取指定用户的收货地址信息", notes = "获取指定用户的收货地址信息", httpMethod = "GET")
+    public ServerResponse getAddress(@PathVariable(value = "userId") String userId,
+                                     @PathVariable(value = "addrId") String addrId) {
+
+        return addressService.getAddressByAddrId(userId,addrId);
     }
 
     /**
@@ -165,6 +187,27 @@ public class UserController {
     }
 
     @ResponseBody
+    @RequestMapping("/addr/order/{userId}/{addrId}")
+    @ApiOperation(value = "获取用户默认收货地址", notes = "获取用户默认收货地址", httpMethod = "GET")
+    public ServerResponse getDefaultAddress(@PathVariable(value = "userId") String userId,
+                                            @PathVariable(value = "addrId") String addrId) {
+
+        ServerResponse serverResponse = null;
+
+        try {
+            Address address = addressMapper.getByUserIdAddrId(userId, addrId);
+            serverResponse = ServerResponse.createBySuccess("结算时选取收货地址成功", address);
+            log.info("用户{}结算时选取收货地址成功{}", userId, address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            serverResponse = ServerResponse.createByErrorMessage("结算时选取收货地址成功异常");
+            log.info("用户{}结算时选取收货地址成功异常", userId);
+        } finally {
+            return serverResponse;
+        }
+    }
+
+    @ResponseBody
     @RequestMapping("/addr/del/{userId}/{addrId}")
     @ApiOperation(value = "删除收货地址信息", notes = "删除收货地址信息", httpMethod = "GET")
     public ServerResponse delAddress(@PathVariable(value = "userId") String userId,
@@ -176,7 +219,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/addr/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加收货地址", notes = "添加收货地址", httpMethod = "POST")
-    public ServerResponse addOrUpdate(@RequestParam(value = "recieve_name") String recieve_name,
+    public ServerResponse addAddr(@RequestParam(value = "recieve_name") String recieve_name,
                                       @RequestParam(value = "detail_address") String detail_address,
                                       @RequestParam(value = "mobile1") String mobile1,
                                       @RequestParam(value = "mobile2") String mobile2,
@@ -190,8 +233,8 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/addr/update", method = RequestMethod.POST)
-    @ApiOperation(value = "添加收货地址", notes = "添加收货地址", httpMethod = "POST")
-    public ServerResponse addOrUpdate(@RequestParam(value = "addr_id") String addr_id,
+    @ApiOperation(value = "更新收货地址", notes = "更新收货地址", httpMethod = "POST")
+    public ServerResponse updateAddr(@RequestParam(value = "addr_id") String addr_id,
                                       @RequestParam(value = "recieve_name") String recieve_name,
                                       @RequestParam(value = "detail_address") String detail_address,
                                       @RequestParam(value = "mobile1") String mobile1,

@@ -1,6 +1,7 @@
 package com.zgds.xfyj.dao;
 
 import com.zgds.xfyj.domain.pojo.Cart;
+import com.zgds.xfyj.domain.pojo.Goods;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -35,6 +36,21 @@ public interface CartMapper extends Mapper<Cart> {
 
     @Select("select * from tbl_shop_cart where user_id=#{user_id} and goods_id=#{goods_id}")
     List<Cart> getByUserIdGoodsId(@Param(value = "user_id") String userId, @Param(value = "goods_id") String goodsId);
+
+    /**
+     * 获取订单下的商品详情
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+//    @Select("select * from tbl_goods where id in (#{goods_ids})")
+    @Select("<script>"
+               + "select * from tbl_shop_cart where user_id=#{user_id} and id in "
+               + "<foreach item='item' index='index' collection='cartItemIds' open='(' separator=',' close=')'>"
+                   + "#{item}"
+               + "</foreach>"
+           + "</script>")
+    List<Cart> getListByUserIdCartItemIds(@Param(value = "user_id") String userId,@Param(value = "cartItemIds") List<String> cartItemIds);
 
     /**
      * 再次添加相同的商品到购物车更新 该商品数量、总价、更新时间 而不是新增一条记录

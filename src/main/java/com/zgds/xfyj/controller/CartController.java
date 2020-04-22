@@ -6,6 +6,7 @@ import com.zgds.xfyj.dao.UserMapper;
 import com.zgds.xfyj.domain.pojo.Cart;
 import com.zgds.xfyj.domain.pojo.CartVO;
 import com.zgds.xfyj.domain.pojo.Goods;
+import com.zgds.xfyj.util.BigDecimalArithUtil;
 import com.zgds.xfyj.util.ServerResponse;
 import com.zgds.xfyj.util.UUIDUtils;
 import io.swagger.annotations.Api;
@@ -40,6 +41,7 @@ public class CartController {
     private UserMapper userMapper;
     @Autowired
     private GoodsMapper goodsMapper;
+
 
     /**
      * 添加到购物车
@@ -109,6 +111,80 @@ public class CartController {
             e.printStackTrace();
             serverResponse = ServerResponse.createByErrorMessage("加入购物车异常！");
             log.info("用户{}添加商品{}至购物车异常", user_id, goods_id);
+        } finally {
+            return serverResponse;
+        }
+    }
+
+    /**
+     * 订单支付展示
+     * @param user_id
+     * @param cartItemsIds
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/order/goods/list")
+    @ApiOperation(value = "根据商品ids获取订单下的商品列表", notes = "根据商品ids获取订单下的商品列表", httpMethod = "POST")
+    public ServerResponse getListByGoodsIds(@RequestParam("user_id") String user_id,
+                                            @RequestParam(value = "goodsIds") String cartItemsIds) {
+        ServerResponse serverResponse = null;
+        List<Cart> list = null;
+        List<CartVO> cartVOList = null;
+
+        try {
+            String[] cartIdsArr = cartItemsIds.split(",");
+            List<String> idsList = new ArrayList();
+            for (String id:
+                    cartIdsArr) {
+                idsList.add(id);
+            }
+            //从tbl_shop+_cart中获取
+            list = cartMapper.getListByUserIdCartItemIds(user_id,idsList);
+            //遍历购物车item 组装cartVO
+            if(!ListUtils.isEmpty(list)){
+                cartVOList = new ArrayList<>();
+                for (Cart c:list) {
+                    //获取商品
+                    String goods_id = c.getGoods_id();
+                    Goods goods = goodsMapper.selectByPrimaryKey(goods_id);
+                    //组装CartVo
+                    Double total_price = 0.0;
+                    if(Integer.valueOf(goods.getIs_discount())==0){
+                        total_price = BigDecimalArithUtil.mul(Double.parseDouble(goods.getSale_price()), c.getCount());
+                    }else if(Integer.valueOf(goods.getIs_discount())==1){
+                        total_price = BigDecimalArithUtil.mul(Double.parseDouble(goods.getDiscount_price()), c.getCount());
+                    }
+
+                    CartVO cartVO = new CartVO().builder()
+                            .id(c.getId())
+                            .goods_id(goods.getId())
+                            .goods_name(goods.getGoods_name())
+                            .user_id(user_id)
+                            .main_img(goods.getMain_img())
+                            .standard(goods.getStandard())
+                            .capacity(goods.getCapacity())
+                            .sale_price(Double.parseDouble(goods.getSale_price()))
+                            .is_discount(Integer.parseInt(goods.getIs_discount()))
+//                            .dis_price(Double.parseDouble(goods.getDiscount_price()))
+                            .count(c.getCount())
+                            .total_price(total_price)
+                            .build();
+                    //判断是否打折设置打折价格
+                    if(goods.getIs_discount().equals(0)){
+                        cartVO.setDis_price(Double.parseDouble(goods.getSale_price()));
+                    }else if(goods.getIs_discount().equals(1)){
+                        cartVO.setDis_price(Double.parseDouble(goods.getDiscount_price()));
+                    }
+
+                    cartVOList.add(cartVO);
+                }
+            }
+            serverResponse = ServerResponse.createBySuccess("根据商品ids获取订单下的商品列表成功", cartVOList);
+            log.info("用户{}根据商品ids获取订单下的商品列表成功",user_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            serverResponse = ServerResponse.createByErrorMessage("根据商品ids获取订单下的商品列表异常");
+            log.info("根据商品ids获取订单下的商品列表异常，错误信息{}", user_id, e.getLocalizedMessage());
         } finally {
             return serverResponse;
         }
@@ -237,5 +313,6 @@ public class CartController {
             return serverResponse;
         }
     }
+
 
 }

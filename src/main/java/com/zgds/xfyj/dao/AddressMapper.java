@@ -20,6 +20,9 @@ public interface AddressMapper extends Mapper<Address> {
     @Select("select * from tbl_address where user_id=#{user_id} and is_default='1' order by is_default desc limit 0,1")
     Address getDeafultAddressByUserId(@Param(value = "user_id") String userId);
 
+    @Select("select * from tbl_address where user_id=#{user_id} and id=#{addr_id}")
+    Address selectAddressByUserIdAddrId(@Param(value = "user_id") String userId, @Param(value = "addr_id") String addrId);
+
     /**
      * 更新指定用户的所有收货地址is_default为0
      *
@@ -38,6 +41,15 @@ public interface AddressMapper extends Mapper<Address> {
      */
     @Update("update tbl_address set is_default=1 where user_id=#{user_id} and id=#{id}")
     Integer updateIsDefault1ByIdUserId(@Param(value = "id") String id, @Param(value = "user_id") String userId);
+    /**
+     * 获取 指定用户的 指定收货地址 的 详情
+     *
+     * @param id
+     * @param userId
+     * @return
+     */
+    @Select("select * from tbl_address where user_id=#{user_id} and id=#{id}")
+    Address getByUserIdAddrId(@Param(value = "user_id") String userId, @Param(value = "id") String id);
 
 
 }
