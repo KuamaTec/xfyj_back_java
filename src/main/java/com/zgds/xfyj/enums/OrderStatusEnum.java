@@ -14,8 +14,8 @@ public enum OrderStatusEnum {
 
     WE_CHAT_WAIT_SEND(20000, "待发货"),//待发货
     WE_CHAT_ALREADY_SEND(20001, "已发货"),//已发货、待收货
-    WE_CHAT_ALREADY_RECEIVED(20002, "已收货"),//已收货
-    WE_CHAT_ORDER_COMPLETE(20003, "已完成"),//已完成、待评价
+//    WE_CHAT_ALREADY_RECEIVED(20002, "已收货"),//已收货
+//    WE_CHAT_ORDER_COMPLETE(20003, "已完成"),//已完成、待评价
     WE_CHAT_SALES_RETURN(20004, "退货"),//退货
     WE_CHAT_ORDER_FORUM(20005, "待评价"),//待评价
 

@@ -1,10 +1,13 @@
 package com.zgds.xfyj.websocket;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,24 +18,28 @@ import java.util.Map;
 @Controller
 public class WebSocketController {
 
+    @Autowired
+    private WebSocketServer webSocketServer;
+
     @RequestMapping("/socket/index")
     public String websocket(){
         return "websocket";
     }
 
-    @RequestMapping(value="/pushVideoListToWeb",method= RequestMethod.GET)
-    @ResponseBody
-//    public Map<String,Object> pushVideoListToWeb(@RequestBody Map<String,Object> param) {
-    public Map<String,Object> pushVideoListToWeb() {
-        Map<String,Object> result =new HashMap<String,Object>();
 
+
+    @RequestMapping(value="/push2chrome/{user_id}/{order_id}",method= RequestMethod.GET)
+    @ResponseBody
+    public Map<String,Object> pushVideoListToWeb(@PathVariable(name = "user_id")String userId,
+                                                 @PathVariable(name = "order_id")String orderId) {
         try {
-            WebSocketServer.sendInfo("有新客户呼入");
-            result.put("operationResult", true);
+            //1、存库
+            //2、推送
+//            sendMessage("你有新的订单请及时处理");
+            webSocketServer.sendInfo("你有新的订单请及时处理,用户id："+userId+"，订单id："+orderId);
         }catch (IOException e) {
-            result.put("operationResult", true);
         }
-        return result;
+        return null;
     }
 
 }

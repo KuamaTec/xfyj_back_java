@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>websocket</title>
+    <title>商家管理后台界面</title>
     <script>
         var socket;
         if (typeof (WebSocket) == "undefined") {
@@ -11,7 +11,7 @@
             console.log("您的浏览器支持WebSocket");
 
             //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-            socket = new WebSocket("ws://192.168.1.9:8888/websocket");
+            socket = new WebSocket("ws://192.168.1.4:8088/websocket");
             //打开事件
             socket.onopen = function () {
                 console.log("Socket 已打开");
@@ -19,6 +19,7 @@
             //获得后台响应消息事件
             socket.onmessage = function (msg) {
                 console.log("后台响应数据：" + msg.data);
+                alert("温馨提示："+msg.data)
                 //发现消息进入    调后台获取
                 //getCallingList();
             };
@@ -49,4 +50,6 @@
 <button onclick="send()">提交</button>
 
 </body>
+
+<h1 style="font-size:60px;">商家后台界面</h1>
 </html>
