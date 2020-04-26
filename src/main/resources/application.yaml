@@ -3,7 +3,7 @@ jasypt:
     password: gzds_GZDS
     algorithm: PBEWithMD5AndDES
 server:
-  port: 8888
+  port: 8088
 spring:
   thymeleaf:
     prefix: classpath:/templates/
@@ -91,26 +91,11 @@ wx:
   config:
     appid: wx630dc5a5e802df54
     appsercret: de40721a605db0379e0033596af22579
+
     #支付api秘钥（已修改，需要重置）
     mch_id: 1578294421
     key: Xfyj1234Xfyj1234Xfyj1234Xfyj1234
-    notifyurl: http://a31ef7db.ngrok.io/WeChatPayController/WeChatPayNotify
+    #微信支付异步回调地址
+    notifyurl: http://8binab.natappfree.cc/weChat/pay/notify
+    #生成二维码链接支付地址
     payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
-    ordinarymember: 1
-    seniormember: 2
-    upgrademember: 1
-#wx:
-#  config:
-#    appid: wxffe9f8ad93950a30
-#    mch_id: 1534636891
-#    #oThf74k_zhLnEvQJdc0Q4P5H2cYUoThf74k_zhLnEvQJdc0Q4P5H2cYU秘钥
-#    appsercret: 5401f47627f73112f42c90a26d0547bb
-#    #支付api秘钥（已修改，需要重置）
-#    key: Hlkj1234Hlkj1234Hlkj1234Hlkj1234
-#    notifyurl: http://a31ef7db.ngrok.io/WeChatPayController/WeChatPayNotify
-#    payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
-#    ordinarymember: 1
-#    seniormember: 2
-#    upgrademember: 1
-
-#fdsfdas

@@ -5,8 +5,22 @@ package com.zgds.xfyj.enums;
  * 订单状态枚举
  */
 public enum OrderStatusEnum {
+    //微信支付
+    WE_CHAT_WAIT_PAY(10000,"等待支付"),
+    WE_CHAT_PAY_SUCCESS(10001,"支付成功"),
+    WE_CHAT_PAY_FAIL(10002,"支付失败"),
+    WE_CHAT_PAY_CANCEL(10003,"支付取消"),
+    WE_CHAT_PAY_ORDER_CANCEL(10004,"取消订单"),
 
-    NO_PAY(30000, "未支付"),
+    WE_CHAT_WAIT_SEND(20000, "待发货"),//待发货
+    WE_CHAT_ALREADY_SEND(20001, "已发货"),//已发货、待收货
+    WE_CHAT_ALREADY_RECEIVED(20002, "已收货"),//已收货
+    WE_CHAT_ORDER_COMPLETE(20003, "已完成"),//已完成、待评价
+    WE_CHAT_SALES_RETURN(20004, "退货"),//退货
+    WE_CHAT_ORDER_FORUM(20005, "待评价"),//待评价
+
+    //支付宝支付
+    WAIT_PAY(30000, "未支付"),
     PAY_SUCCESS_TRADE_QUERY(30001, "同步交易查询-支付成功"),//支付完成后，同步交易查询-支付完成（成功）
     PAY_FAIL_TRADE_QUERY(30002, "同步交易查询-支付失败"),//支付完成后，同步交易查询-支付完成（失败）
     PAY_SUCCESS_ALI_PAY(30003, "阿里后台异步-支付成功"),//支付宝后台异步通知 支付-成功

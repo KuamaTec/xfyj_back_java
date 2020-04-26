@@ -3,6 +3,7 @@ package com.zgds.xfyj.service;
 import com.zgds.xfyj.dao.*;
 import com.zgds.xfyj.domain.pojo.*;
 import com.zgds.xfyj.domain.vo.OrderVO;
+import com.zgds.xfyj.enums.OrderStatusEnum;
 import com.zgds.xfyj.util.BigDecimalArithUtil;
 import com.zgds.xfyj.util.PlatformOrderNoUtils;
 import com.zgds.xfyj.util.ServerResponse;
@@ -40,17 +41,19 @@ public class OrderService {
     private String Mapper = "OrderMapper";
 
     /**
-     * 购物车结算
+     * 下单入库
      */
     @Transactional
-    public ServerResponse addOrder(String order_name,
-                                   Double order_price,
+    public ServerResponse addOrder(Double order_price,
                                    String cart_ids,
-                                   String user_id) {
+                                   String user_id,
+                                   String addr_id) {
 
         ServerResponse serverResponse = null;
 
         try {
+            //订单名称
+            String order_name = "test_order_name";
             //1、保存order
             String orderId = UUIDUtils.generateId();
             Order order = Order.builder()
@@ -61,8 +64,9 @@ public class OrderService {
                     .place_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                     .update_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                     .cart_ids(cart_ids)
-                    .order_status(1)//已下单——待付款
+                    .order_status(OrderStatusEnum.WE_CHAT_WAIT_PAY.getPay_status_code())//已下单——等待支付
                     .user_id(user_id)
+                    .addr_id(addr_id)
                     .build();
 
             int i = mapper.insert(order);
@@ -317,6 +321,7 @@ public class OrderService {
     public ServerResponse updateOrderStatus(String orderId, String userId, Integer orderStatus) {
         ServerResponse serverResponse = null;
         try {
+            //从后台查询
             Integer i = mapper.updateOrderStatus(orderStatus, userId, orderId);
             if (i > 0) {
                 log.info("更新订单{}状态{}成功:", orderId, orderStatus);

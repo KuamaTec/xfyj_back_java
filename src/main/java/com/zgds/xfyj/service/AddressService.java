@@ -92,6 +92,15 @@ public class AddressService {
             criteria.andEqualTo("id", addr_id);
             int i = addressMapper.deleteByExample(example);
             if (i > 0) {
+                //判断数据库中当前用户的收货地址，如果仅剩1条，置为默认
+                Example example1 = new Example(Address.class);
+                example1.createCriteria().andEqualTo("user_id",userId);
+                List<Address> list = addressMapper.selectByExample(example1);
+                if(list.size()==1){
+                    Address address1 = list.get(0);
+                    address1.setIs_default(Integer.valueOf(1));
+                    addressMapper.updateByPrimaryKey(address1);
+                }
                 serverResponse = ServerResponse.createBySuccess("删除用户收货地址信息成功", address);
                 log.info("删除用户{}收货地址信息成功", userId);
             } else {
@@ -138,8 +147,7 @@ public class AddressService {
             //2、当前用户收货地址是否已存在
             Example example = new Example(Address.class);
             Example.Criteria criteria = example.createCriteria();
-            criteria.andEqualTo("user_id", user_id)
-            ;
+            criteria.andEqualTo("user_id", user_id);
 
             List<Address> list = addressMapper.selectByExample(example);
             if (ListUtils.isEmpty(list)) {

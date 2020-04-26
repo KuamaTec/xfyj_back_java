@@ -29,5 +29,6 @@ public class Order {
     private String update_time;//更新时间
     private String cart_ids;//外键—购物车商品id（逗号分开）
     private String user_id;
+    private String addr_id;//外键—收货地址
 
 }
