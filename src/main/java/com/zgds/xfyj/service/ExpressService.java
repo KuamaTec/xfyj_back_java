@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class ExpressService {
      */
     public ServerResponse insert(Express express) {
         express.setId(UUIDUtils.generateId());
-        express.setUpdate_time(new Date());
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        express.setUpdate_time(sdf.format(new Date()));
         log.info("管理员开始添加物流信息！",Mapper+".insert"+express);
         Integer i= mapper.insert(express);
         if (i>0){
