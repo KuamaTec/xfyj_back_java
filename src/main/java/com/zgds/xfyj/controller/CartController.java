@@ -193,12 +193,11 @@ public class CartController {
     @ResponseBody
     @RequestMapping("/list")
     @ApiOperation(value = "分页获取用户购物车中的商品列表", notes = "分页获取用户购物车中的商品列表", httpMethod = "POST")
-    public ServerResponse getRecommend(@RequestParam("usr_id") String user_id,
+    public ServerResponse getRecommend(@RequestParam("user_id") String user_id,
                                        @RequestParam(value = "currPage", required = true, defaultValue = "1") Integer currPage,
                                        @RequestParam(value = "pageSize", required = true, defaultValue = "10") Integer pageSize) {
         ServerResponse serverResponse = null;
         List<CartVO> list = null;
-
         try {
             int totalPage = 0;
             int totalCount = cartMapper.allNumber(user_id);
@@ -254,8 +253,7 @@ public class CartController {
                     list.add(cartVO);
                 }
             }
-
-            serverResponse = ServerResponse.createBySuccess("分页获取购物车中商品成功", list);
+            serverResponse = ServerResponse.createBySuccess("分页获取购物车中商品成功"+user_id, list);
             log.info("用户{}分页获取购物车中的商品成功");
         } catch (Exception e) {
             e.printStackTrace();

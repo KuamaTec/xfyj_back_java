@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 /**
  * @author Xiang-ping li
- * @descition 用户
+ * @descition 评论
  * @date 2020/1/3 0003  9:33
  */
 @Table(name = "tbl_discuss")
@@ -22,9 +22,9 @@ public class Discuss {
 
     @Id
     private String id;
-    private String imgs;
-    private String content;
-    private String discuss_time;
-    private String goods_id;
-    private String user_id;
+    private String imgs;//评论图片
+    private String content;//评论内容
+    private String discuss_time;//评论时间
+    private String goods_id;//商品id
+    private String user_id;//用户id
 }

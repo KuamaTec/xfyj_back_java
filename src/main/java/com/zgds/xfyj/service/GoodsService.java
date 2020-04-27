@@ -8,7 +8,6 @@ import com.zgds.xfyj.domain.pojo.GoodsBrand;
 import com.zgds.xfyj.domain.pojo.GoodsClassify;
 import com.zgds.xfyj.util.AliOSSUtils;
 import com.zgds.xfyj.util.ServerResponse;
-import com.zgds.xfyj.util.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +40,9 @@ public class GoodsService {
 
     private String Mapper = "GoodsMapper";
 
-    public ServerResponse getAllGoods(){
+    public ServerResponse getAllGoods(Integer currPage,Integer pageSize){
         log.info("用户开始查询商品详情："+Mapper+".getAllBrand()");
-        List<Goods> list = mapper.getAllGoods();
+        List<Goods> list = mapper.getAllGoods(currPage,pageSize);
         List<GoodsClassify> goodsClassifyList = classifyMapper.getAll();
         List<GoodsBrand> goodsBrandList = brandMapper.getAll();
         log.info("用户开始查询商品详情,转换商品分类id：classifyMapper.getClassifyName");
@@ -129,6 +128,7 @@ public class GoodsService {
      * @return
      */
     public ServerResponse insertAll(Goods goods, MultipartFile file,MultipartFile file1,MultipartFile file2){
+        System.out.println("进入方法-------------------------------------------------------------------------------------------------------");
         System.out.println(goods.toString()+"-----"+file.isEmpty()+"---------"+file1.isEmpty()+"------------"+file2.isEmpty());
         /*String id=UUIDUtils.generateId();
         goods.setId(id);
@@ -162,7 +162,7 @@ public class GoodsService {
             log.info("添加产品信息失败:"+Mapper+".insert()");
             return ServerResponse.createByErrorMessage("添加失败！");
         }*/
-        return null;
+        return ServerResponse.createBySuccess("调用成功！！！");
     }
 
     /**
@@ -174,10 +174,10 @@ public class GoodsService {
     public ServerResponse deleteGoods(String id) {
         Integer i = mapper.deleteGoods(id);
         if (i > 0) {
-            log.info("删除产品信息成功:" + Mapper + ".deleteGoods()");
+            log.info("删除产品信息成功:" + Mapper + ".deleteGoods()"+id);
             return ServerResponse.createBySuccessMessages("删除成功！");
         } else {
-            log.info("删除产品信息失败:" + Mapper + ".deleteGoods()");
+            log.info("删除产品信息失败:" + Mapper + ".deleteGoods()"+id);
             return ServerResponse.createByErrorMessage("删除失败！");
         }
 
@@ -206,10 +206,10 @@ public class GoodsService {
         }
         Integer i = mapper.updateGoods(goods);
         if (i > 0) {
-            log.info("修改产品信息成功:" + Mapper + ".updateGoods()");
+            log.info("修改产品信息成功:" + Mapper + ".updateGoods()"+goods.toString());
             return ServerResponse.createBySuccessMessages("修改成功！");
         } else {
-            log.info("修改产品信息失败:" + Mapper + ".updateGoods()");
+            log.info("修改产品信息失败:" + Mapper + ".updateGoods()"+goods.toString());
             return ServerResponse.createByErrorMessage("修改失败！");
         }
 

@@ -26,6 +26,8 @@ public interface CollectionMapper extends Mapper<Collection> {
     @Select("SELECT count(id) FROM tbl_collection where user_id=#{user_id} and goods_id=#{goods_id}")
     Integer isCollected(@Param("goods_id") String goodsId, @Param("user_id") String userId);
 
+    @Select("select * from tbl_collection where user_id=#{user_id}")
+    List<Collection> getUserIdCollection(@Param("user_id") String userId);
 }
 
 

@@ -35,9 +35,13 @@ public class BackGoodsController {
      */
     @ResponseBody
     @RequestMapping("/getAllGoods")
-    @ApiOperation(value = "查看所有商品详情列表", notes="查看所有商品详情列表", httpMethod = "GET")
-    public ServerResponse getAllGoods(){
-        ServerResponse serverResponse = service.getAllGoods();
+    @ApiOperation(value = "查看所有商品详情列表", notes="查看所有商品详情列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码", paramType = "query", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "页大小", paramType = "query", required = true, dataType = "Integer")
+    })
+    public ServerResponse getAllGoods(Integer page,Integer limit){
+        ServerResponse serverResponse = service.getAllGoods(page,limit);
         return serverResponse;
     }
 

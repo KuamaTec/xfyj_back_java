@@ -188,7 +188,6 @@ public class OrderService {
                     map1.put("shipping_address",uList.getShipping_address());//收货地址
                     map1.put("rigist_time",uList.getRigist_time());//用户注册时间
                     list.add(map1);
-                    break;
                 }
             }
         }
@@ -359,7 +358,6 @@ public class OrderService {
     /**
      * 删除订单
      *
-     * @param order
      * @return
      */
     public ServerResponse del(String userId, String orderId) {
@@ -371,5 +369,31 @@ public class OrderService {
             log.info("删除订单{}失败:", orderId);
             return ServerResponse.createByErrorMessage("删除失败！");
         }
+    }
+
+    /**
+     * 根据用户id查询订单信息
+     *
+     * @return
+     */
+    public ServerResponse getUserIdOrder(String userId) {
+        log.info("管理员开始查询用户订单信息：", "getUserIdOrder(),用户id="+userId);
+        List<Order> orderList = mapper.getUserIdOrder(userId);
+        List list = new ArrayList();
+        for (Order li:orderList) {
+            Map map = new HashMap();
+            User user = userMapper.selectById(li.getUser_id());
+            user.setNick(URLDecoder.decode(user.getNick()));
+            map.put("id",li.getId());
+            map.put("order_no",li.getOrder_no());
+            map.put("place_time",li.getPlace_time());
+            map.put("nick",user.getNick());
+            map.put("mobile",user.getMobile());
+            map.put("order_price",li.getOrder_price());
+            list.add(map);
+        }
+
+        log.info("管理员查询用户订单信息成功！：", "getUserIdOrder(),用户id="+userId);
+        return ServerResponse.createBySuccess("管理员查询用户订单信息成功",list);
     }
 }

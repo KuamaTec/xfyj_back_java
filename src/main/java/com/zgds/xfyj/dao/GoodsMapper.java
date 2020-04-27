@@ -15,8 +15,8 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface GoodsMapper extends Mapper<Goods> {
 
-    @Select("select * from tbl_goods")
-    List<Goods> getAllGoods();
+    @Select("select * from tbl_goods limit #{currPage},#{pageSize}")
+    List<Goods> getAllGoods(Integer currPage,Integer pageSize);
 
     @Select("select * from tbl_goods where brand_id=#{brand_id}")
     List<Goods> getAllBrand(String brand_id);
@@ -26,6 +26,8 @@ public interface GoodsMapper extends Mapper<Goods> {
 
     @Select("select * from tbl_goods where recommend=1 and classify_id=#{classify_id} limit #{currPage},#{pageSize}")
     List<Goods> getRecommend(String classify_id, Integer currPage, Integer pageSize);
+
+
 
     @Select("select count(*) from tbl_goods where recommend=1")
     Integer getCountRecommend();

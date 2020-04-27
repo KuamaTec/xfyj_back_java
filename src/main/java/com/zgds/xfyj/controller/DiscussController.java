@@ -1,8 +1,10 @@
 package com.zgds.xfyj.controller;
 
 import com.zgds.xfyj.dao.DiscussMapper;
+import com.zgds.xfyj.dao.GoodsMapper;
 import com.zgds.xfyj.dao.UserMapper;
 import com.zgds.xfyj.domain.pojo.Discuss;
+import com.zgds.xfyj.domain.pojo.Goods;
 import com.zgds.xfyj.domain.pojo.User;
 import com.zgds.xfyj.domain.vo.DiscussVO;
 import com.zgds.xfyj.util.ServerResponse;
@@ -18,9 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.ListUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author lxp
@@ -37,7 +37,8 @@ public class DiscussController {
     private DiscussMapper discussMapper;
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private GoodsMapper goodsMapper;
     /**
      * 添加评论
      *
@@ -117,14 +118,13 @@ public class DiscussController {
 
     @ResponseBody
     @RequestMapping("/discuss/list")
-    @ApiOperation(value = "获取收藏列表", notes = "获取收藏列表", httpMethod = "POST")
+    @ApiOperation(value = "获取评论列表", notes = "获取评论列表", httpMethod = "POST")
     public ServerResponse getCollections(@RequestParam(value = "goodsId") String goodsId,
                                          @RequestParam(value = "currPage") Integer currPage,
                                          @RequestParam(value = "pageSize") Integer pageSize) {
         ServerResponse serverResponse = null;
         List<Discuss> list = null;
         List<DiscussVO> list1 = null;
-
         try {
             Integer totalCount = discussMapper.allCounts(goodsId);
             //总页数
@@ -166,5 +166,29 @@ public class DiscussController {
             return serverResponse;
         }
 
+    }
+
+    @ResponseBody
+    @RequestMapping("/getUserIdDiscuss")
+    @ApiOperation(value = "管路员获取用户评论列表", notes = "管路员获取用户评论列表", httpMethod = "POST")
+    public ServerResponse getUserIdDiscuss(@RequestParam(value = "user_id") String user_id) {
+        log.info("管理员开始查询用户评论列表","getUserIdDiscuss(),user_id="+user_id);
+        List<Discuss> discussList =discussMapper.getUserIdDiscuss(user_id);
+        List list = new ArrayList();
+        for (Discuss li:discussList) {
+            Map map = new HashMap();
+            Goods goods = goodsMapper.getGoodsId(li.getGoods_id());
+            map.put("id",li.getId());
+            map.put("goods_name",goods.getGoods_name());
+            map.put("sale_price",goods.getSale_price());
+            map.put("main_img",goods.getMain_img());
+            map.put("imgs",li.getImgs());
+            map.put("content",li.getContent());
+            map.put("discuss_time",li.getDiscuss_time());
+            list.add(map);
+        }
+        log.info("管理员查询用户评论列表成功！","getUserIdDiscuss(),user_id="+user_id);
+
+        return ServerResponse.createBySuccess(list);
     }
 }

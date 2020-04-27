@@ -22,9 +22,10 @@ public class Express {
 
     @Id
     private String id;
-    private String express_company;
-    private String express_no;
-    private String update_time;
-    private String order_ids;
-    private String user_id;
+    private String express_company;//快递公司
+    private String express_no;//快递单号
+    private String update_time;//更新时间（商家操作）
+    private String order_ids;//订单id
+    private String user_id;//用户id
+
 }

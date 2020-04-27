@@ -1,6 +1,7 @@
 package com.zgds.xfyj.service;
 
 import com.zgds.xfyj.dao.CollectionMapper;
+import com.zgds.xfyj.dao.CreditsUpdateRecordsMapper;
 import com.zgds.xfyj.dao.GoodsMapper;
 import com.zgds.xfyj.dao.UserMapper;
 import com.zgds.xfyj.domain.pojo.Collection;
@@ -17,9 +18,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -28,16 +27,25 @@ public class UserService {
 
     @Autowired
     private UserMapper mapper;
-
+    @Autowired
+    private CreditsUpdateRecordsMapper creditsUpdateRecordsMapper;
     /**
      * 查询所有用户信息
      * @return
      */
     public ServerResponse getAll(){
-        List<User> list = mapper.getAll();
-        for (User li:list) {
+        List<User> userList = mapper.getAll();
+        List list = new ArrayList();
+        for (User li:userList) {
+            Map map = new HashMap();
             li.setNick(URLDecoder.decode(li.getNick()));
+            map.put("id",li.getId());
+            map.put("nick",li.getNick());
+            Integer number=creditsUpdateRecordsMapper.getCount(li.getId());
+            map.put("credits",number);
+            list.add(map);
         }
+
         return ServerResponse.createBySuccess(list);
     }
 

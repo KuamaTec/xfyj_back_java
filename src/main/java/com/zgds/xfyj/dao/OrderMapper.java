@@ -19,6 +19,9 @@ public interface OrderMapper extends Mapper<Order> {
     @Select("select * from tbl_order")
     List<Order> getAll();
 
+    @Select("select * from tbl_order where user_id=#{user_id}")
+    List<Order> getUserIdOrder(@Param(value = "user_id") String userId);
+
     @Select("select count(id) from tbl_order where user_id=#{user_id}")
     Integer allCount(@Param(value = "user_id") String userId);
 

@@ -113,6 +113,23 @@ public class BackOrderController {
     }
 
     /**
+     * 管理员根据用户id查看订单信息
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getUserIdOrder")
+    @ApiOperation(value = "管理员根据用户id查看订单信息", notes="管理员根据用户id查看订单信息", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user_id", value = "用户id", paramType = "query", required = true, dataType = "String")
+    })
+    public ServerResponse getUserIdOrder(@RequestParam(value = "user_id")String user_id){
+        ServerResponse serverResponse = service.getUserIdOrder(user_id);
+        return serverResponse;
+    }
+
+
+    /**
      * 查看所有订单
      * @param
      * @return
