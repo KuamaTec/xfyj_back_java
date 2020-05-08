@@ -2,6 +2,7 @@ package com.zgds.xfyj.service;
 
 import com.zgds.xfyj.dao.InformMapper;
 import com.zgds.xfyj.domain.pojo.Inform;
+import com.zgds.xfyj.domain.pojo.User;
 import com.zgds.xfyj.util.ServerResponse;
 import com.zgds.xfyj.util.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,19 +27,12 @@ public class InformService {
 
 
     public ServerResponse getAll(Integer currPage,Integer pageSize){
-        int totalPage = 0;
-        int totalCount = mapper.informCount();
-        if ((totalCount % pageSize) == 0) {
-            totalPage = totalCount / pageSize;
-        } else {
-            totalPage = (totalCount / pageSize) + 1;
-        }
-        if (currPage > totalPage) {
-            return ServerResponse.createBySuccessMessages("页码错误");
-        }
-        int startIndex = (currPage-1)*pageSize;
         log.info("商家查询所有通知信息：InformMapper.getAll（）");
-        return ServerResponse.createBySuccess("查询成功！",mapper.getAll(startIndex,pageSize));
+        List<Inform> informs = mapper.getAll(currPage,pageSize);
+        Map map = new HashMap();
+        map.put("list",informs);
+        map.put("number",mapper.number());
+        return ServerResponse.createBySuccess("查询成功！",map);
     }
 
     public ServerResponse insert(Inform inform) {

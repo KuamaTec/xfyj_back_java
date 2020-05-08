@@ -163,8 +163,8 @@ public class OrderService {
      * 用户查看所有订单
      * @return
      */
-    public ServerResponse getAll(){
-        List<Order>  goodsList=mapper.getAll();
+    public ServerResponse getAll(Integer page, Integer limit){
+        List<Order>  goodsList=mapper.getAll(page,limit);
         List<User> userList = userMapper.getAll();
         List list = new ArrayList();
         for (Order gList:goodsList) {
@@ -193,25 +193,27 @@ public class OrderService {
         }
 
         log.info("用户查看所有订单:"+Mapper+".getShowGoods()");
-        /*return ServerResponse.createBySuccess("查询成功！",goodsList);*/
-        return ServerResponse.createBySuccess("查询成功！",list);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",mapper.number());
+        return ServerResponse.createBySuccess("查询成功！",map);
     }
     /**
      * 用户查看所有订单
      * @return
      */
-    public ServerResponse getOrder(){
+    /*public ServerResponse getOrder(){
         List<Order>  goodsList=mapper.getAll();
         log.info("用户查看所有订单:"+Mapper+".getShowGoods()");
         return ServerResponse.createBySuccess("查询成功！",goodsList);
-    }
+    }*/
     /**
      * 用户查看所有订单
      * @return
      */
-    public ServerResponse showGetAll(){
+    public ServerResponse showGetAll(Integer page, Integer limit){
         List list = new ArrayList();
-        List<Order> goodsList=mapper.getAll();
+        List<Order> goodsList=mapper.getAll(page,limit);
         for (Order gList:goodsList) {
             Map<String,Object> map = new HashMap<>();
             User user = userMapper.selectById(gList.getUser_id());
@@ -376,9 +378,9 @@ public class OrderService {
      *
      * @return
      */
-    public ServerResponse getUserIdOrder(String userId) {
+    public ServerResponse getUserIdOrder(String userId,Integer page,Integer limit) {
         log.info("管理员开始查询用户订单信息：", "getUserIdOrder(),用户id="+userId);
-        List<Order> orderList = mapper.getUserIdOrder(userId);
+        List<Order> orderList = mapper.getUserIdOrder(userId,page,limit);
         List list = new ArrayList();
         for (Order li:orderList) {
             Map map = new HashMap();
@@ -392,8 +394,10 @@ public class OrderService {
             map.put("order_price",li.getOrder_price());
             list.add(map);
         }
-
         log.info("管理员查询用户订单信息成功！：", "getUserIdOrder(),用户id="+userId);
-        return ServerResponse.createBySuccess("管理员查询用户订单信息成功",list);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",mapper.userID_number(userId));
+        return ServerResponse.createBySuccess("管理员查询用户订单信息成功",map);
     }
 }

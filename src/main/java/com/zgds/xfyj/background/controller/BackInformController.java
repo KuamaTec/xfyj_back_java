@@ -48,9 +48,10 @@ public class BackInformController {
     @ResponseBody
     @RequestMapping("/getAll")
     @ApiOperation(value = "查询通知信息列表", notes="查询通知信息列表", httpMethod = "POST")
-    public ServerResponse getAll(@RequestParam(value = "currPage", required = false, defaultValue = "1") Integer currPage,
-                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
-        ServerResponse serverResponse = service.getAll(currPage,pageSize);
+    public ServerResponse getAll(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                 @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit){
+        page-=1;
+        ServerResponse serverResponse = service.getAll(page,limit);
         return serverResponse;
     }
     /**

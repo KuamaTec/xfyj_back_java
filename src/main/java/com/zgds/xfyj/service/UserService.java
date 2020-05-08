@@ -35,6 +35,25 @@ public class UserService {
      */
     public ServerResponse getAll(){
         List<User> userList = mapper.getAll();
+        List<Object> list = new ArrayList();
+        for (User li:userList) {
+            Map map = new HashMap();
+            li.setNick(URLDecoder.decode(li.getNick()));
+            map.put("id",li.getId());
+            map.put("nick",li.getNick());
+            Integer number=creditsUpdateRecordsMapper.getCount(li.getId());
+            map.put("credits",number);
+            list.add(map);
+        }
+        return ServerResponse.createBySuccess(list);
+    }
+
+    /**
+     * 查询所有用户信息
+     * @return
+     */
+    public ServerResponse selectByPage(Integer page,Integer limit){
+        List<User> userList = mapper.selectByPage(page,limit);
         List list = new ArrayList();
         for (User li:userList) {
             Map map = new HashMap();
@@ -45,8 +64,10 @@ public class UserService {
             map.put("credits",number);
             list.add(map);
         }
-
-        return ServerResponse.createBySuccess(list);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",mapper.allNumber());
+        return ServerResponse.createBySuccess(map);
     }
 
     /**

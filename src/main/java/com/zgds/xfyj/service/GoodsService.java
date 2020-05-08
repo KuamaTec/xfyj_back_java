@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -63,7 +61,11 @@ public class GoodsService {
                 }
             }
         }
-        return ServerResponse.createBySuccess("商品详情查询成功！",list);
+        /*List li=new ArrayList();*/
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",mapper.number());
+        return ServerResponse.createBySuccess("商品详情查询成功！",map);
     }
 
     public ServerResponse getShowGoods(String brand_id) {
@@ -124,12 +126,13 @@ public class GoodsService {
     /**
      * 添加商品信息
      * @param goods
-     * @param file
+     * @param details
+     * @param shuffling
      * @return
      */
-    public ServerResponse insertAll(Goods goods, MultipartFile file,MultipartFile file1,MultipartFile file2){
+    public ServerResponse insertAll(Goods goods,String[] details,String[] shuffling){
         System.out.println("进入方法-------------------------------------------------------------------------------------------------------");
-        System.out.println(goods.toString()+"-----"+file.isEmpty()+"---------"+file1.isEmpty()+"------------"+file2.isEmpty());
+        System.out.println(goods.toString()+"-----"+details[0]+"---------"+shuffling[0]);
         /*String id=UUIDUtils.generateId();
         goods.setId(id);
         goods.setTime(new Date());
@@ -163,6 +166,25 @@ public class GoodsService {
             return ServerResponse.createByErrorMessage("添加失败！");
         }*/
         return ServerResponse.createBySuccess("调用成功！！！");
+    }
+
+    /**
+     * 添加商品信息图片
+     * @param file
+     * @return
+     */
+    public ServerResponse insertFile(MultipartFile file,String imgClass){
+        String fileUrl=null;
+        if (!file.isEmpty()){
+            try {
+                log.info("添加产品信息，上传产品信息图片成功！");
+                fileUrl=aliOSSUtils.uploadImg(file,imgClass);
+            } catch (FileNotFoundException e) {
+                log.info("添加产品信息，上传产品信息图片失败:",e.getLocalizedMessage());
+                e.printStackTrace();
+            }
+        }
+        return ServerResponse.createBySuccess(fileUrl);
     }
 
     /**

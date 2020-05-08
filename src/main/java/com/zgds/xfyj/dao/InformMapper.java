@@ -18,6 +18,8 @@ public interface InformMapper extends Mapper<Inform> {
     @Select("SELECT * FROM tbl_inform ORDER BY time DESC LIMIT 5")
     List<Inform> getInform();
 
+    @Select("SELECT count(*) FROM tbl_inform")
+    Integer number();
 
     @Insert("insert into tbl_inform values(#{id},#{content},#{time})")
     int insert(Inform inform);

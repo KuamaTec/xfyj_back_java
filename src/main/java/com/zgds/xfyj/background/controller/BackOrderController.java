@@ -36,8 +36,13 @@ public class BackOrderController {
     @ResponseBody
     @RequestMapping("/getAll")
     @ApiOperation(value = "查看所有订单", notes = "查看所有订单", httpMethod = "GET")
-    public ServerResponse getAll() {
-        ServerResponse serverResponse = service.getAll();
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码", paramType = "query", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "页大小", paramType = "query", required = true, dataType = "Integer")
+    })
+    public ServerResponse getAll(Integer page,Integer limit) {
+        page-=1;
+        ServerResponse serverResponse = service.getAll(page,limit);
         return serverResponse;
     }
 
@@ -104,13 +109,13 @@ public class BackOrderController {
      * @param
      * @return
      */
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping("/getOrder")
     @ApiOperation(value = "查看所有订单", notes="查看所有订单", httpMethod = "GET")
     public ServerResponse getOrder(){
         ServerResponse serverResponse = service.getOrder();
         return serverResponse;
-    }
+    }*/
 
     /**
      * 管理员根据用户id查看订单信息
@@ -121,10 +126,14 @@ public class BackOrderController {
     @RequestMapping("/getUserIdOrder")
     @ApiOperation(value = "管理员根据用户id查看订单信息", notes="管理员根据用户id查看订单信息", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "user_id", value = "用户id", paramType = "query", required = true, dataType = "String")
+            @ApiImplicitParam(name = "user_id", value = "用户id", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "page", value = "当前页码", paramType = "query", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "页大小", paramType = "query", required = true, dataType = "Integer")
+
     })
-    public ServerResponse getUserIdOrder(@RequestParam(value = "user_id")String user_id){
-        ServerResponse serverResponse = service.getUserIdOrder(user_id);
+    public ServerResponse getUserIdOrder(@RequestParam(value = "user_id")String user_id,Integer page,Integer limit){
+        page-=1;
+        ServerResponse serverResponse = service.getUserIdOrder(user_id,page,limit);
         return serverResponse;
     }
 
@@ -136,9 +145,14 @@ public class BackOrderController {
      */
     @ResponseBody
     @RequestMapping("/showGetAll")
-    @ApiOperation(value = "查看所有订单", notes="查看所有订单", httpMethod = "GET")
-    public ServerResponse showGetAll(){
-        ServerResponse serverResponse = service.showGetAll();
+    @ApiOperation(value = "查看所有订单", notes="查看所有订单", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码", paramType = "query", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "页大小", paramType = "query", required = true, dataType = "Integer")
+    })
+    public ServerResponse showGetAll(Integer page,Integer limit){
+        page-=1;
+        ServerResponse serverResponse = service.showGetAll(page,limit);
         return serverResponse;
     }
 

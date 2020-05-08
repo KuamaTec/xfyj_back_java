@@ -105,6 +105,7 @@ public class BackGoodsController {
             @ApiImplicitParam(name = "sale_price", value = "价格", paramType = "query", required = true, dataType = "String"),
             @ApiImplicitParam(name = "standard", value = "规格", paramType = "query", required = true, dataType = "String"),
             @ApiImplicitParam(name = "produce_addr", value = "产地", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "main_img", value = "产品主图", paramType = "query", required = true, dataType = "String"),
             @ApiImplicitParam(name = "recommend", value = "是否推荐（0-否，1-是）", paramType = "query", required = true, dataType = "String"),
             @ApiImplicitParam(name = "classify_id", value = "分类id", paramType = "query", required = true, dataType = "String"),
             @ApiImplicitParam(name = "brand_id", value = "系列id", paramType = "query", required = true, dataType = "String"),
@@ -114,8 +115,51 @@ public class BackGoodsController {
             @ApiImplicitParam(name = "discount_price", value = "折后价", paramType = "query", required = false, dataType = "String"),
             @ApiImplicitParam(name = "capacity", value = "容量", paramType = "query", required = true, dataType = "String")
     })
-    public ServerResponse insertAll(Goods goods, @RequestParam("file") MultipartFile file,@RequestParam("file1") MultipartFile file1,@RequestParam("file2") MultipartFile file2){
-        ServerResponse serverResponse = service.insertAll(goods,file,file1,file2);
+    public ServerResponse insertAll(Goods goods,@RequestParam("details") String[] details,@RequestParam("shuffling") String[] shuffling){
+        ServerResponse serverResponse = service.insertAll(goods,details,shuffling);
+        return serverResponse;
+    }
+
+    /**
+     * 添加商品图片
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertGoodsFile")
+    @ApiOperation(value = "添加商品主图", notes="添加商品主图", httpMethod = "POST")
+    public ServerResponse insertGoodsFile(@RequestParam("file") MultipartFile file){
+        String imgClass="Goods";
+        ServerResponse serverResponse = service.insertFile(file,imgClass);
+        System.out.println("---------------------------------------成功进入方法insertGoodsFile："+file.isEmpty());
+        return serverResponse;
+    }
+    /**
+     * 添加商品图片
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertGoodsDetailsFile")
+    @ApiOperation(value = "添加商品详情图片", notes="添加商品详情图片", httpMethod = "POST")
+    public ServerResponse insertGoodsDetailsFile(@RequestParam("file1") MultipartFile file){
+        String imgClass="GoodsDetails";
+        ServerResponse serverResponse = service.insertFile(file,imgClass);
+        System.out.println("---------------------------------------成功进入方法insertGoodsDetailsFile："+file.isEmpty());
+        return serverResponse;
+    }
+    /**
+     * 添加商品图片
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/insertGoodsShufflingFile")
+    @ApiOperation(value = "添加商品轮播图片", notes="添加商品轮播图片", httpMethod = "POST")
+    public ServerResponse insertGoodsShufflingFile(@RequestParam("file2") MultipartFile file){
+        String imgClass="GoodsShuffling";
+        ServerResponse serverResponse = service.insertFile(file,imgClass);
+        System.out.println("---------------------------------------成功进入方法insertGoodsShufflingFile："+file.isEmpty());
         return serverResponse;
     }
 

@@ -16,11 +16,17 @@ import java.util.List;
 public interface OrderMapper extends Mapper<Order> {
 
 
-    @Select("select * from tbl_order")
-    List<Order> getAll();
+    @Select("select * from tbl_order limit #{page},#{limit}")
+    List<Order> getAll(Integer page, Integer limit);
 
-    @Select("select * from tbl_order where user_id=#{user_id}")
-    List<Order> getUserIdOrder(@Param(value = "user_id") String userId);
+    @Select("select count(*) from tbl_order")
+    Integer number();
+
+    @Select("select * from tbl_order where user_id=#{user_id} limit #{page},#{limit}")
+    List<Order> getUserIdOrder(@Param(value = "user_id") String userId,Integer page,Integer limit);
+
+    @Select("select count(*) from tbl_order where user_id=#{user_id}")
+    Integer userID_number(@Param(value = "user_id") String userId);
 
     @Select("select count(id) from tbl_order where user_id=#{user_id}")
     Integer allCount(@Param(value = "user_id") String userId);

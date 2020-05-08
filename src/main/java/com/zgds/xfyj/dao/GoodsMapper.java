@@ -27,7 +27,8 @@ public interface GoodsMapper extends Mapper<Goods> {
     @Select("select * from tbl_goods where recommend=1 and classify_id=#{classify_id} limit #{currPage},#{pageSize}")
     List<Goods> getRecommend(String classify_id, Integer currPage, Integer pageSize);
 
-
+    @Select("select count(*) from tbl_goods")
+    Integer number();
 
     @Select("select count(*) from tbl_goods where recommend=1")
     Integer getCountRecommend();
