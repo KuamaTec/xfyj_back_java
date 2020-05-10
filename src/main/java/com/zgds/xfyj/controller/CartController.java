@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.ListUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author 李向平
@@ -43,6 +41,20 @@ public class CartController {
     private GoodsMapper goodsMapper;
 
 
+    @ResponseBody
+    @RequestMapping("/getUserCart")
+    @ApiOperation(value = "将商品添加到购物车", notes = "将商品添加到购物车", httpMethod = "POST")
+    public ServerResponse getUserCart(@RequestParam("user_id") String user_id,
+                                        @RequestParam("page") Integer page,
+                                        @RequestParam("limit") Integer limit) {
+        page-=1;
+        List<Cart> list = cartMapper.getAllByUserId(user_id,page,limit);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",cartMapper.allNumber(user_id));
+        ServerResponse serverResponse = ServerResponse.createBySuccess(map);
+        return serverResponse;
+    }
     /**
      * 添加到购物车
      *
@@ -194,8 +206,8 @@ public class CartController {
     @RequestMapping("/list")
     @ApiOperation(value = "分页获取用户购物车中的商品列表", notes = "分页获取用户购物车中的商品列表", httpMethod = "POST")
     public ServerResponse getRecommend(@RequestParam("user_id") String user_id,
-                                       @RequestParam(value = "currPage", required = true, defaultValue = "1") Integer currPage,
-                                       @RequestParam(value = "pageSize", required = true, defaultValue = "10") Integer pageSize) {
+                                       @RequestParam(value = "page", required = true, defaultValue = "1") Integer currPage,
+                                       @RequestParam(value = "limit", required = true, defaultValue = "10") Integer pageSize) {
         ServerResponse serverResponse = null;
         List<CartVO> list = null;
         try {

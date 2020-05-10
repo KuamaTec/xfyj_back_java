@@ -171,9 +171,12 @@ public class DiscussController {
     @ResponseBody
     @RequestMapping("/getUserIdDiscuss")
     @ApiOperation(value = "管路员获取用户评论列表", notes = "管路员获取用户评论列表", httpMethod = "POST")
-    public ServerResponse getUserIdDiscuss(@RequestParam(value = "user_id") String user_id) {
+    public ServerResponse getUserIdDiscuss(@RequestParam(value = "user_id") String user_id,
+                                           @RequestParam(value = "page") Integer page,
+                                           @RequestParam(value = "limit") Integer pageSize) {
+        page-=1;
         log.info("管理员开始查询用户评论列表","getUserIdDiscuss(),user_id="+user_id);
-        List<Discuss> discussList =discussMapper.getUserIdDiscuss(user_id);
+        List<Discuss> discussList =discussMapper.getUserIdDiscuss(user_id,page,pageSize);
         List list = new ArrayList();
         for (Discuss li:discussList) {
             Map map = new HashMap();
@@ -188,7 +191,9 @@ public class DiscussController {
             list.add(map);
         }
         log.info("管理员查询用户评论列表成功！","getUserIdDiscuss(),user_id="+user_id);
-
-        return ServerResponse.createBySuccess(list);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",discussMapper.number(user_id));
+        return ServerResponse.createBySuccess(map);
     }
 }

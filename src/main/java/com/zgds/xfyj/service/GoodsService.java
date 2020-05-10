@@ -54,6 +54,7 @@ public class GoodsService {
                     break;
                 }
             }
+            goodsBrandList.forEach((temp)->{});
             for (GoodsBrand gList:goodsBrandList) {
                 if (gList.getId().equals(li.getBrand_id())){
                     li.setBrand_id(gList.getBrand_name());

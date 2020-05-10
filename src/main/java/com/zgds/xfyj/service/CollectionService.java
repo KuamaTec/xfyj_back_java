@@ -5,6 +5,8 @@ import com.zgds.xfyj.dao.GoodsMapper;
 import com.zgds.xfyj.domain.pojo.Collection;
 import com.zgds.xfyj.domain.pojo.Goods;
 import com.zgds.xfyj.util.ServerResponse;
+import io.swagger.annotations.Api;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +35,9 @@ public class CollectionService {
      * 管理员查询用户收藏列表
      * @return
      */
-    public ServerResponse getUserIdCollection(String user_id){
+    public ServerResponse getUserIdCollection(String user_id, Integer page, Integer pageSize){
         log.info("管理员查询用户收藏列表:"+Mapper+".getUserIdCollection()");
-        List<Collection>  goodsList=mapper.getUserIdCollection(user_id);
+        List<Collection>  goodsList=mapper.getUserIdCollection(user_id,page,pageSize);
         List list = new ArrayList();
         for (Collection li:goodsList) {
             Map map = new HashMap();
@@ -47,7 +49,10 @@ public class CollectionService {
             map.put("collect_time",li.getCollect_time());
             list.add(map);
         }
-        return ServerResponse.createBySuccess("查询成功！",list);
+        Map map = new HashMap();
+        map.put("list",list);
+        map.put("number",mapper.number());
+        return ServerResponse.createBySuccess("查询成功！",map);
     }
 
 

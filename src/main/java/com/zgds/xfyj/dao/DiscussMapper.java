@@ -17,8 +17,11 @@ public interface DiscussMapper extends Mapper<Discuss> {
     @Select("select count(id) from tbl_discuss where goods_id=#{goods_id}")
     Integer allCounts(@Param(value = "goods_id") String goodsId);
 
-    @Select("select * from tbl_discuss where user_id=#{user_id}")
-    List<Discuss> getUserIdDiscuss(@Param(value = "user_id") String user_id);
+    @Select("select count(*) from tbl_discuss where user_id=#{user_id}")
+    Integer number(String user_id);
+
+    @Select("select * from tbl_discuss where user_id=#{user_id} limit #{page},#{pageSize}")
+    List<Discuss> getUserIdDiscuss(@Param(value = "user_id") String user_id,Integer page,Integer pageSize);
 
     @Delete("delete from tbl_discuss where id=#{id} and user_id=#{user_id}")
     Integer deleteByUserIdDiscussId(@Param(value = "user_id") String userId, @Param(value = "id") String id);

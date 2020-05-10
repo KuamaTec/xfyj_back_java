@@ -16,8 +16,8 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface CartMapper extends Mapper<Cart> {
 
-    @Select("select * from tbl_shop_cart where user_id=#{user_id}")
-    List<Cart> getAllByUserId(@Param(value = "user_id") String userId);
+    @Select("select * from tbl_shop_cart where user_id=#{userId} limit #{page},#{limit}")
+    List<Cart> getAllByUserId(String userId,Integer page,Integer limit);
 
     @Select("SELECT * FROM tbl_shop_cart where user_id=#{user_id} order by insert_time desc limit #{start},#{pageSize}")
     List<Cart> selectByPage(@Param("user_id") String userId, @Param("start") Integer start, @Param("pageSize") Integer pageSize);
